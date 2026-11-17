@@ -1,0 +1,47 @@
+name: FileSync
+options:
+  bundleIdPrefix: com.withgobind
+  deploymentTarget:
+    macOS: "15.0"
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "0.1.0"
+    CURRENT_PROJECT_VERSION: "1"
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+targets:
+  FileSync:
+    type: application
+    platform: macOS
+    sources:
+      - FileSync
+    entitlements:
+      path: FileSync/FileSync.entitlements
+      # Not sandboxed: a local utility that must read any drive the user picks in its own drive list.
+      properties: {}
+    scheme:
+      testTargets:
+        - FileSyncTests
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.withgobind.filesync
+        GENERATE_INFOPLIST_FILE: YES
+        INFOPLIST_KEY_CFBundleDisplayName: File Sync
+        INFOPLIST_KEY_LSApplicationCategoryType: public.app-category.utilities
+        ENABLE_HARDENED_RUNTIME: YES
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+  FileSyncTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - FileSyncTests
+    dependencies:
+      - target: FileSync
+    settings:
+      base:
+        GENERATE_INFOPLIST_FILE: YES
+        PRODUCT_BUNDLE_IDENTIFIER: com.withgobind.filesync.tests
+        TEST_HOST: $(BUILT_PRODUCTS_DIR)/FileSync.app/Contents/MacOS/FileSync
+        BUNDLE_LOADER: $(TEST_HOST)
