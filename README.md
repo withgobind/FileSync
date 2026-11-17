@@ -12,14 +12,37 @@ A small Mac app that keeps two drives in step. Pick a **master** and a **target*
 - **Safe by default**: files that exist only in the target are kept unless you turn on *Remove extras*. Even then they go to the Trash and are never deleted for good. A replacement is written to a temporary copy and then swapped in.
 - **Saved syncs**: save a pair to run when both drives are connected, every few hours, daily or weekly. Choose *Ask me first* (notify and wait for review) or *Sync automatically*. File Sync keeps running in the menu bar when the window is closed.
 
-## Requirements
+## Install on your Mac
 
-- macOS 15 or later
-- Xcode 16 or later and [XcodeGen](https://github.com/yonaskolb/XcodeGen)
+You need a Mac with **macOS 15 (Sequoia) or later**, on Apple silicon or Intel.
 
-## Build
+1. **Download** `FileSync-0.1.0.zip` from the [latest release](https://github.com/withgobind/FileSync/releases/latest) (under *Assets*).
+2. **Unzip** it by double-clicking the file in your Downloads folder. You get `FileSync.app`.
+3. **Move it to Applications**: drag `FileSync.app` into the *Applications* folder in Finder.
+4. **Open it the first time.** File Sync is a free, homemade build. It isn't notarized by Apple, so macOS stops it the first time:
+   1. Double-click `FileSync.app`. macOS says it can't verify the app. Click **Done**.
+   2. Open **System Settings → Privacy & Security** and scroll down to *Security*. Next to "FileSync was blocked to protect your Mac", click **Open Anyway**.
+   3. Confirm with your password or Touch ID, then click **Open**. From then on it opens normally.
+
+   If you prefer Terminal, this does the same thing:
+   ```bash
+   xattr -dr com.apple.quarantine /Applications/FileSync.app
+   ```
+5. **Allow access when asked.** The first time you compare a folder on an external drive, macOS asks whether File Sync may access files on a removable volume. Click **Allow**. To use saved syncs, open **Automate…** and allow **Notifications** and **Open at login**. Each has a button that opens the right Settings page.
+
+### Update or remove
+
+- **Update:** quit File Sync from its menu bar icon, then replace `FileSync.app` in Applications with the new one. Your saved syncs are kept.
+- **Remove:** quit File Sync, then move `FileSync.app` to the Trash. To also remove saved syncs, delete `~/Library/Application Support/FileSync`.
+
+## Build from source
+
+You need macOS 15 or later, Xcode 16 or later and [XcodeGen](https://github.com/yonaskolb/XcodeGen) (`brew install xcodegen`).
+
 
 ```bash
+git clone https://github.com/withgobind/FileSync.git
+cd FileSync
 xcodegen
 xcodebuild -scheme FileSync -destination 'platform=macOS' build
 xcodebuild -scheme FileSync -destination 'platform=macOS' test
